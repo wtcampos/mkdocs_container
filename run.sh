@@ -3,6 +3,8 @@
 
 ARG=$1
 
+#exit if any command fails
+set -e
 
 if [[ $ARG == "produce" ]]; then
 
