@@ -9,7 +9,7 @@ RUN apk add --no-cache\
 RUN apk add -U tzdata
 RUN cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
-RUn mkdir -p mkdocs
+RUN mkdir -p mkdocs
 WORKDIR mkdocs
 ARG MKDOCS_SITE
 ADD run.sh /run.sh

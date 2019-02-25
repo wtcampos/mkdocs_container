@@ -16,7 +16,7 @@ elif [[ $ARG == "serve" ]]; then
 
     cd $MKDOCS_SITE
     tar -xzf site.tar.gz 1>&2
-    mkdocs serve 1>&2
+    mkdocs serve -a 0.0.0.0:8000 1>&2
 
 else
     exit
