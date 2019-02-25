@@ -4,6 +4,8 @@ ARG=$1
 #exit if any command fails
 set -e
 
+
+#Verify the argument to produce or serve the site
 if [[ $ARG == "produce" ]]; then
  
 	docker run --name mkdocs -p 8000:8000 --mount type=bind,source="$(pwd)",target=/mkdocs -e MKDOCS_SITE=$2 -it wtcampos/mkdocs_container produce
@@ -11,6 +13,7 @@ if [[ $ARG == "produce" ]]; then
 elif [[ $ARG == "serve" ]]; then
 
 	docker run --name mkdocs -p 8000:8000 --mount type=bind,source="$(pwd)",target=/mkdocs -e MKDOCS_SITE=$2 -it wtcampos/mkdocs_container serve
+
 
 else
     cat <<USAGE

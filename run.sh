@@ -1,11 +1,12 @@
 #!/bin/bash
 
-
+#set the argument 
 ARG=$1
 
 #exit if any command fails
 set -e
 
+#Verify the arg value to produce or serve the site
 if [[ $ARG == "produce" ]]; then
 
     cd $MKDOCS_SITE
