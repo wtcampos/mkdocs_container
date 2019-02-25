@@ -6,11 +6,11 @@ set -e
 
 if [[ $ARG == "produce" ]]; then
  
-	docker run  -p8000:8000 --mount type=bind,source="$(pwd)",target=/mkdocs -e MKDOCS_SITE=$2 -it wtcampos/mkdocs_container produce
+	docker run --name mkdocs -p 8000:8000 --mount type=bind,source="$(pwd)",target=/mkdocs -e MKDOCS_SITE=$2 -it wtcampos/mkdocs_container produce
 
 elif [[ $ARG == "serve" ]]; then
 
-	docker run  -p8000:8000 --mount type=bind,source="$(pwd)",target=/mkdocs -e MKDOCS_SITE=$2 -it wtcampos/mkdocs_container serve
+	docker run --name mkdocs -p 8000:8000 --mount type=bind,source="$(pwd)",target=/mkdocs -e MKDOCS_SITE=$2 -it wtcampos/mkdocs_container serve
 
 else
     cat <<USAGE
