@@ -101,7 +101,7 @@ mkdocs_container/
 
 ### Prerequisites
 
-##Docker
+## Docker
 
 To install on Linux or MAC, execute the line below: 
 
