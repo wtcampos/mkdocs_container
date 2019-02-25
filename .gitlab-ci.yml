@@ -1,0 +1,45 @@
+stages:
+   - build
+   - test
+
+ image: docker:stable
+
+ variables:
+   # When using dind service we need to instruct docker, to talk with the
+   # daemon started inside of the service. The daemon is available with
+   # a network connection instead of the default /var/run/docker.sock socket.
+   #
+   # The 'docker' hostname is the alias of the service container as described at
+   # https://docs.gitlab.com/ee/ci/docker/using_docker_images.html#accessing-the-services
+   #
+   # Note that if you're using Kubernetes executor, the variable should be set to
+   # tcp://localhost:2375 because of how Kubernetes executor connects services
+   # to the job container
+   DOCKER_HOST: tcp://docker:2375/
+   # When using dind, it's wise to use the overlayfs driver for
+   # improved performance.
+   DOCKER_DRIVER: overlay2
+
+ services:
+   - docker:dind
+
+ before_script:
+   - docker info
+   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+
+ build:
+   image: docker:stable
+   stage: build
+   script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE" .
+    - docker push "$CI_REGISTRY_IMAGE"
+   only:
+    - master
+     
+ test:
+   stage: test
+   script:
+     - docker run --name mkdocs_produce --mount type=bind,source="$(pwd)",target=/mkdocs -e MKDOCS_SITE=testdocs "$CI_REGISTRY_IMAGE" produce
+     - docker run -d --name mkdocs_serve -p 8000:8000 --mount type=bind,source="$(pwd)",target=/mkdocs -e MKDOCS_SITE=testdocs "$CI_REGISTRY_IMAGE" serve
+     - docker exec -i mkdocs_serve pytest tests.py
+
