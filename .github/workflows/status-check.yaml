@@ -1,0 +1,38 @@
+name: Status Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  status-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Run Tests (Replace with your actual test commands)
+        run: |
+          # Replace this with your test commands
+          echo "Running tests..."
+          # Example: npm install && npm test
+
+      - name: Set Status Check
+        if: always()
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data } = await github.repos.createCommitStatus({
+              ...context.repo,
+              sha: github.context.sha,
+              state: 'success', // Set to 'failure' if tests fail
+              target_url: 'https://example.com/status-check-results', // Link to status details
+              description: 'Tests passed', // Description of status check
+              context: 'status-check'
+            });
