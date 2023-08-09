@@ -7,10 +7,7 @@ Service to generate a site using the mkdocs application. There are two options t
 - mkdocs
 - bash
 
-
-
 #### Running the application
-
 
 This docker container runs mkdocs in two ways:
 
@@ -20,7 +17,7 @@ This docker container runs mkdocs in two ways:
 Example: docker run  --mount type=bind,source=\$(pwd)",target=/mkdocs -e MKDOCS_SITE=<MKDOCS_PROJECT_DIRECTORY> -it wtcampos/mkdocs_container produce
 
 ```
-	
+
 2. Run the mkdocs with the tar.gz file produced before:
 
 ```
@@ -31,7 +28,7 @@ Example: docker run  -p8000:8000 --mount type=bind,source=\$(pwd)",target=/mkdoc
 You have a wrapper script called mkdockerize.sh, so to run the app using this script just run:
 
 ```
-sh mkdockerize produce <PROJECT_FOLDER> 
+sh mkdockerize produce <PROJECT_FOLDER>
 
 ```
 
@@ -44,9 +41,7 @@ sh mkdocreize serve <PROJECT_FOLDER>
 
 To serve the site.
 
-
-The app was deployed to Docker hub, so the image is public with the name wtcampos/mkdocs_container 
-
+The app was deployed to Docker hub, so the image is public with the name wtcampos/mkdocs_container
 
 ### Directory tree
 
@@ -103,25 +98,23 @@ mkdocs_container/
 
 ## Docker
 
-To install on Linux or MAC, execute the line below: 
+To install on Linux or MAC, execute the line below:
 
 ```
-$ curl -fsSL https://get.docker.com | bash
+curl -fsSL https://get.docker.com | bash
 
 ```
-
 
 ### Running the test
 
 Run integration tests with pytest:
 
 ```
-$ pytest -v tests.py
+pytest -v tests.py
 
 ```
 
 You can run the test after run the serve command with the command below:
-
 
 ```
 
@@ -129,5 +122,4 @@ $docker exec -it mkdocs_serve  pytest tests.py
 
 ```
 
-
-
+testing---
