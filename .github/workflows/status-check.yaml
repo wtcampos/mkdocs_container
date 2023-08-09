@@ -3,36 +3,37 @@ name: Status Check
 on:
   push:
     branches:
-      - master
-  pull_request:
-    branches:
-      - master
+      - main
 
 jobs:
-  status-check:
+  check-directory-changes:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+    - name: Checkout Repository
+      uses: actions/checkout@v2
 
-      - name: Run Tests (Replace with your actual test commands)
-        run: |
-          # Replace this with your test commands
-          echo "Running tests..."
-          # Example: npm install && npm test
+    - name: Get Changed Directories
+      id: get_changed_dirs
+      run: |
+        changed_dirs=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -o '^[^/]\+/' | sort -u)
+        echo "::set-output name=changed_dirs::$changed_dirs"
 
-      - name: Set Status Check
-        if: always()
-        uses: actions/github-script@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { data } = await github.repos.createCommitStatus({
-              ...context.repo,
-              sha: github.context.sha,
-              state: 'success', // Set to 'failure' if tests fail
-              target_url: 'https://example.com/status-check-results', // Link to status details
-              description: 'Tests passed', // Description of status check
-              context: 'status-check'
-            });
+    - name: Run Workflow for Changed Directories
+      run: |
+        changed_dirs="${{ steps.get_changed_dirs.outputs.changed_dirs }}"
+        excluded_dirs=("testdocs/") 
+
+        for dir in $changed_dirs; do
+          # Check if the current directory is not in the excluded list
+          if [[ ! " ${excluded_dirs[@]} " =~ " $dir " ]]; then
+            echo "Running workflow for changed directory: $dir"
+
+            # Customize this step to run your specific workflow logic
+            # For example, replace this with your test commands
+            echo "Running tests for directory: $dir"
+            
+          else
+            echo "Directory $dir is excluded. Skipping..."
+          fi
+        done
